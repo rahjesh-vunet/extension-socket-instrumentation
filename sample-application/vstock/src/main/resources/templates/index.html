@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Order Form</title>
+</head>
+<body>
+    <form id="orderForm">
+        <label for="stockCode">Stock Code:</label>
+        <input type="text" id="stockCode" name="stockCode" required>
+        <br>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" required>
+        <br>
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" required>
+        <br>
+
+        <button type="button" onclick="submitOrder()">Submit Order</button>
+    </form>
+
+    <div id="ackMessage"></div>
+
+    <script>
+        function submitOrder() {
+            var formData = {
+                stockCode: document.getElementById('stockCode').value,
+                price: document.getElementById('price').value,
+                quantity: document.getElementById('quantity').value
+            };
+
+            // Make an AJAX request to the REST API
+            fetch('/api/place-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the acknowledgment message
+                document.getElementById('ackMessage').innerText = data.message;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
